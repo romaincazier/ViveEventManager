@@ -1,3 +1,15 @@
+/*
+ * ViveEventManager - A small utility class to easily add listeners to hmd/controllers events
+ *
+ * Author:
+ *    Romain Cazier
+ *    romaincazier.com
+ *    @romaincazier
+ *
+ * Project page:
+ *    http://github.com/romaincazier/ViveEventManager
+ *
+ */
 using UnityEngine;
 using System.Collections;
 
