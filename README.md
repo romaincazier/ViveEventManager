@@ -14,7 +14,7 @@ A small utility class to easily add listeners to hmd/controllers events
 
    * `ViveEventManager.Instance.[Event] += [Listener];`
    
-+ You can use a "debug" mode that will print you the event as they occur:
++ You can use a "debug" mode that will print you the events as they occur:
 
    * create an empty GameObject, add the script and select the "Debug Mode" or
    
