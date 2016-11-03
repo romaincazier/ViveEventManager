@@ -6,19 +6,19 @@ A small utility class to easily add listeners to hmd/controllers events
 + Download and place the `ViveEventManager.cs` file in your "Assets" folder
 + Add a script to the GameObject you want to react on an event and add a listener:
 
-   `void FunctionName(ControllerEventObject evt)` for a controller event or
+   * `void FunctionName(ControllerEventObject evt)` for a controller event or
    
-   `void FunctionName(HMDEventObject evt)` for a HMD event
+   * `void FunctionName(HMDEventObject evt)` for a HMD event
 
 + In the same GameObject, execute on `Awake()` (or `Start()`) the following code:
 
-   `ViveEventManager.Instance.[Event] += [Listener];`
+   * `ViveEventManager.Instance.[Event] += [Listener];`
    
 + You can use a "debug" mode that will print you the event as they occur:
 
-   Create an empty GameObject, add the script and select the "Debug Mode" or
+   * create an empty GameObject, add the script and select the "Debug Mode" or
    
-   On runtime, select "Debug Mode" on the "Event Manager" GameObject
+   * at runtime, select "Debug Mode" on the "Event Manager" GameObject
 
 
 ## Supported events
