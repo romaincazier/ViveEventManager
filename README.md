@@ -61,4 +61,5 @@ A small utility class to easily add listeners to hmd/controllers events
 + add `OnPointerEnter`, `OnPointerOver`, `OnPointerLeave` events on the controllers using a raycast
 + add `OnContactEnter`, `OnContactOver`, `OnContactLeave` events on the controllers using a collider (sphere ?)
 + add `OnLookEnter`, `OnLookOver`, `OnLookLeave` events on the HMD
++ add a debug mode to print events as they occur and display raycast/collider
 + add a Unity scene with an example
