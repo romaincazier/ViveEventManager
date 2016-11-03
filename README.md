@@ -4,7 +4,7 @@ A small utility class to easily add listeners to hmd/controllers events
 
 ## How to use it ?
 + Download and place the `ViveEventManager.cs` file in your "Assets" folder
-+ Add a script to the GameObject you want to react on an event and add a listener:
++ Create a new script in the GameObject you want to react on an event and add a listener function:
 
    * `void FunctionName(ControllerEventObject evt)` for a controller event or
    
@@ -32,17 +32,17 @@ A small utility class to easily add listeners to hmd/controllers events
 + `OnGripPressStart`
 + `OnGripPress`
 + `OnGripPressEnd`
-+ `OnGripClick` (triggered if the delta time between `OnGripPressStart` and `OnGripPressEnd` is less than 300 milliseconds)
++ `OnGripClick`, triggered if the delta time between `OnGripPressStart` and `OnGripPressEnd` is less than 300 milliseconds
 
 #### Touchpad
 + `OnTouchStart`
 + `OnTouchMove`
 + `OnTouchEnd`
-+ `OnTouchTap` (triggered if the delta time between `OnTouchStart` and `OnTouchEnd` is less than 300 milliseconds)
++ `OnTouchTap`, triggered if the delta time between `OnTouchStart` and `OnTouchEnd` is less than 300 milliseconds
 + `OnTouchpadPressStart`
 + `OnTouchpadPress`
 + `OnTouchpadPressEnd`
-+ `OnTouchpadClick` (triggered if the delta time between `OnTouchStart` and `OnTouchEnd` is less than 300 milliseconds)
++ `OnTouchpadClick`, triggered if the delta time between `OnTouchStart` and `OnTouchEnd` is less than 300 milliseconds
 
 #### HMD
 + [to be added]
