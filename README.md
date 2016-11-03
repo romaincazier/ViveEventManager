@@ -13,6 +13,12 @@ A small utility class to easily add listeners to hmd/controllers events
 + In the same GameObject, execute on `Awake()` (or `Start()`) the following code:
 
    `ViveEventManager.Instance.[Event] += [Listener];`
+   
++ You can use a "debug" mode that will print you the event as they occur:
+
+   Create an empty GameObject, add the script and select the "Debug Mode" or
+   
+   On runtime, select "Debug Mode" on the "Event Manager" GameObject
 
 
 ## Supported events
@@ -61,5 +67,5 @@ A small utility class to easily add listeners to hmd/controllers events
 + add `OnPointerEnter`, `OnPointerOver`, `OnPointerLeave` events on the controllers using a raycast
 + add `OnContactEnter`, `OnContactOver`, `OnContactLeave` events on the controllers using a collider (sphere ?)
 + add `OnLookEnter`, `OnLookOver`, `OnLookLeave` events on the HMD
-+ add a debug mode to print events as they occur and display raycast/collider
++ add a debug mode to ~~print events as they occur and~~ display raycast/collider
 + add a Unity scene with an example
