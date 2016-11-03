@@ -22,6 +22,8 @@ public delegate void HMDEventHandler(HMDEventObject evt);
 
 public class ViveEventManager : MonoBehaviour {
 
+    public bool DebugMode;
+
     private static ViveEventManager instance;
     public  static ViveEventManager Instance {
         get {
@@ -79,7 +81,9 @@ public class ViveEventManager : MonoBehaviour {
         hasRightTriggerPressStarted = false;
         hasRightTriggerBeenClicked  = false;
 
-        clickTimeThreshold = .3f;
+        clickTimeThreshold = 0.3f;
+        swipeTimeThreshold = 0.5f;
+        swipeDistanceThreshold = 0.5f;
     }
 
     void FixedUpdate() {
@@ -109,27 +113,48 @@ public class ViveEventManager : MonoBehaviour {
             if(leftController.GetTouchDown(SteamVR_Controller.ButtonMask.Trigger)) {
                 if(OnTriggerPressStart != null) {
                     OnTriggerPressStart(eventObj);
-                    hasLeftTriggerPressStarted = true;
+                }
+                hasLeftTriggerPressStarted = true;
+                if(DebugMode) {
+                    Debug.Log("Left Trigger Press Start");
                 }
             }
 
             if(leftController.GetTouch(SteamVR_Controller.ButtonMask.Trigger)) {
                 if(!hasLeftTriggerPressStarted) {
-                    OnTriggerPressStart(eventObj);
+                    if(OnTriggerPressStart != null) {
+                        OnTriggerPressStart(eventObj);
+                    }
                     hasLeftTriggerPressStarted = true;
+                    if(DebugMode) {
+                        Debug.Log("Left Trigger Press Start");
+                    }
                 } else if(!hasLeftTriggerBeenClicked && leftController.GetState().rAxis1.x == 1.0f) {
-                    OnTriggerClick(eventObj);
+                    if(OnTriggerClick != null) {
+                        OnTriggerClick(eventObj);
+                    }
                     hasLeftTriggerBeenClicked = true;
-                } else if(OnTriggerPress != null) {
-                    OnTriggerPress(eventObj);
-                    if(leftController.GetState().rAxis1.x > 1.0f) hasLeftTriggerBeenClicked = false;
+                    if(DebugMode) {
+                        Debug.Log("Left Trigger Click");
+                    }
+                } else {
+                    if(OnTriggerPress != null) {
+                        OnTriggerPress(eventObj);
+                    }
+                    if(leftController.GetState().rAxis1.x < 1.0f) hasLeftTriggerBeenClicked = false;
+                    if(DebugMode) {
+                        Debug.Log("Left Trigger Press");
+                    }
                 }
             }
 
             if(leftController.GetTouchUp(SteamVR_Controller.ButtonMask.Trigger)) {
                 if(OnTriggerPressEnd != null) {
                     OnTriggerPressEnd(eventObj);
-                    hasLeftTriggerPressStarted = false;
+                }
+                hasLeftTriggerPressStarted = false;
+                if(DebugMode) {
+                    Debug.Log("Left Trigger Press End");
                 }
             }
 
@@ -139,11 +164,17 @@ public class ViveEventManager : MonoBehaviour {
                     OnGripPressStart(eventObj);
                 }
                 leftGripPressStartTime = Time.time;
+                if(DebugMode) {
+                    Debug.Log("Left Grip Press Start");
+                }
             }
 
             if(leftController.GetPress(SteamVR_Controller.ButtonMask.Grip)) {
                 if(OnGripPress != null) {
                     OnGripPress(eventObj);
+                }
+                if(DebugMode) {
+                    Debug.Log("Left Grip Press");
                 }
             }
 
@@ -151,9 +182,15 @@ public class ViveEventManager : MonoBehaviour {
                 if(OnGripPressEnd != null) {
                     OnGripPressEnd(eventObj);
                 }
+                if(DebugMode) {
+                    Debug.Log("Left Grip Press End");
+                }
                 if(Time.time - leftGripPressStartTime < clickTimeThreshold) {
                     if(OnGripClick != null) {
                         OnGripClick(eventObj);
+                    }
+                    if(DebugMode) {
+                        Debug.Log("Left Grip Click");
                     }
                 }
             }
@@ -165,12 +202,18 @@ public class ViveEventManager : MonoBehaviour {
                     OnTouchStart(eventObj);
                 }
                 leftTouchStartTime = Time.time;
+                if(DebugMode) {
+                    Debug.Log("Left Touch Start");
+                }
             }
 
             if(leftController.GetTouch(SteamVR_Controller.ButtonMask.Touchpad)) {
                 eventObj.touchPoint = new Vector2(leftController.GetState().rAxis0.x, leftController.GetState().rAxis0.y);
                 if(OnTouchMove != null) {
                     OnTouchMove(eventObj);
+                }
+                if(DebugMode) {
+                    Debug.Log("Left Touch Move");
                 }
             }
 
@@ -179,9 +222,15 @@ public class ViveEventManager : MonoBehaviour {
                 if(OnTouchEnd != null) {
                     OnTouchEnd(eventObj);
                 }
+                if(DebugMode) {
+                    Debug.Log("Left Touch End");
+                }
                 if(Time.time - leftTouchStartTime < clickTimeThreshold) {
                     if(OnTouchTap != null) {
                         OnTouchTap(eventObj);
+                    }
+                    if(DebugMode) {
+                        Debug.Log("Left Touch Tap");
                     }
                 }
             }
@@ -191,11 +240,17 @@ public class ViveEventManager : MonoBehaviour {
                     OnTouchpadPressStart(eventObj);
                 }
                 leftTouchpadPressStartTime = Time.time;
+                if(DebugMode) {
+                    Debug.Log("Left Touchpad Press Start");
+                }
             }
 
             if(leftController.GetPress(SteamVR_Controller.ButtonMask.Touchpad)) {
                 if(OnTouchpadPress != null) {
                     OnTouchpadPress(eventObj);
+                }
+                if(DebugMode) {
+                    Debug.Log("Left Touchpad Press");
                 }
             }
 
@@ -203,9 +258,15 @@ public class ViveEventManager : MonoBehaviour {
                 if(OnTouchpadPressEnd != null) {
                     OnTouchpadPressEnd(eventObj);
                 }
+                if(DebugMode) {
+                    Debug.Log("Left Touchpad Press End");
+                }
                 if(Time.time - leftTouchpadPressStartTime < clickTimeThreshold) {
                     if(OnTouchpadClick != null) {
                         OnTouchpadClick(eventObj);
+                    }
+                    if(DebugMode) {
+                        Debug.Log("Left Touchpad Click");
                     }
                 }
             }
@@ -225,27 +286,48 @@ public class ViveEventManager : MonoBehaviour {
             if(rightController.GetTouchDown(SteamVR_Controller.ButtonMask.Trigger)) {
                 if(OnTriggerPressStart != null) {
                     OnTriggerPressStart(eventObj);
-                    hasRightTriggerPressStarted = true;
+                }
+                hasRightTriggerPressStarted = true;
+                if(DebugMode) {
+                    Debug.Log("Right Trigger Press Start");
                 }
             }
 
             if(rightController.GetTouch(SteamVR_Controller.ButtonMask.Trigger)) {
                 if(!hasRightTriggerPressStarted) {
-                    OnTriggerPressStart(eventObj);
+                    if(OnTriggerPressStart != null) {
+                        OnTriggerPressStart(eventObj);
+                    }
                     hasRightTriggerPressStarted = true;
+                    if(DebugMode) {
+                        Debug.Log("Right Trigger Press Start");
+                    }
                 } else if(!hasRightTriggerBeenClicked && rightController.GetState().rAxis1.x == 1.0f) {
-                    OnTriggerClick(eventObj);
+                    if(OnTriggerClick != null) {
+                        OnTriggerClick(eventObj);
+                    }
                     hasRightTriggerBeenClicked = true;
-                } else if(OnTriggerPress != null) {
-                    OnTriggerPress(eventObj);
+                    if(DebugMode) {
+                        Debug.Log("Right Trigger Click");
+                    }
+                } else {
+                    if(OnTriggerPress != null) {
+                        OnTriggerPress(eventObj);
+                    }
                     if(rightController.GetState().rAxis1.x < 1.0f) hasRightTriggerBeenClicked = false;
+                    if(DebugMode) {
+                        Debug.Log("Right Trigger Press");
+                    }
                 }
             }
 
             if(rightController.GetTouchUp(SteamVR_Controller.ButtonMask.Trigger)) {
                 if(OnTriggerPressEnd != null) {
                     OnTriggerPressEnd(eventObj);
-                    hasRightTriggerPressStarted = false;
+                }
+                hasRightTriggerPressStarted = false;
+                if(DebugMode) {
+                    Debug.Log("Right Trigger Press End");
                 }
             }
 
@@ -255,11 +337,17 @@ public class ViveEventManager : MonoBehaviour {
                     OnGripPressStart(eventObj);
                 }
                 rightGripPressStartTime = Time.time;
+                if(DebugMode) {
+                    Debug.Log("Right Grip Press Start");
+                }
             }
 
             if(rightController.GetPress(SteamVR_Controller.ButtonMask.Grip)) {
                 if(OnGripPress != null) {
                     OnGripPress(eventObj);
+                }
+                if(DebugMode) {
+                    Debug.Log("Right Grip Press");
                 }
             }
 
@@ -267,9 +355,15 @@ public class ViveEventManager : MonoBehaviour {
                 if(OnGripPressEnd != null) {
                     OnGripPressEnd(eventObj);
                 }
+                if(DebugMode) {
+                    Debug.Log("Right Grip Press End");
+                }
                 if(Time.time - rightGripPressStartTime < clickTimeThreshold) {
                     if(OnGripClick != null) {
                         OnGripClick(eventObj);
+                    }
+                    if(DebugMode) {
+                        Debug.Log("Right Grip Click");
                     }
                 }
             }
@@ -281,12 +375,18 @@ public class ViveEventManager : MonoBehaviour {
                     OnTouchStart(eventObj);
                 }
                 rightTouchStartTime = Time.time;
+                if(DebugMode) {
+                    Debug.Log("Right Touch Start");
+                }
             }
 
             if(rightController.GetTouch(SteamVR_Controller.ButtonMask.Touchpad)) {
                 eventObj.touchPoint = new Vector2(rightController.GetState().rAxis0.x, rightController.GetState().rAxis0.y);
                 if(OnTouchMove != null) {
                     OnTouchMove(eventObj);
+                }
+                if(DebugMode) {
+                    Debug.Log("Right Touch Move");
                 }
             }
 
@@ -295,9 +395,15 @@ public class ViveEventManager : MonoBehaviour {
                 if(OnTouchEnd != null) {
                     OnTouchEnd(eventObj);
                 }
+                if(DebugMode) {
+                    Debug.Log("Right Touch End");
+                }
                 if(Time.time - rightTouchStartTime < clickTimeThreshold) {
                     if(OnTouchTap != null) {
                         OnTouchTap(eventObj);
+                    }
+                    if(DebugMode) {
+                        Debug.Log("Right Touch Tap");
                     }
                 }
             }
@@ -307,11 +413,17 @@ public class ViveEventManager : MonoBehaviour {
                     OnTouchpadPressStart(eventObj);
                 }
                 rightTouchpadPressStartTime = Time.time;
+                if(DebugMode) {
+                    Debug.Log("Right Touchpad Press Start");
+                }
             }
 
             if(rightController.GetPress(SteamVR_Controller.ButtonMask.Touchpad)) {
                 if(OnTouchpadPress != null) {
                     OnTouchpadPress(eventObj);
+                }
+                if(DebugMode) {
+                    Debug.Log("Right Touchpad Press");
                 }
             }
 
@@ -319,9 +431,15 @@ public class ViveEventManager : MonoBehaviour {
                 if(OnTouchpadPressEnd != null) {
                     OnTouchpadPressEnd(eventObj);
                 }
+                if(DebugMode) {
+                    Debug.Log("Right Touchpad Press End");
+                }
                 if(Time.time - rightTouchpadPressStartTime < clickTimeThreshold) {
                     if(OnTouchpadClick != null) {
                         OnTouchpadClick(eventObj);
+                    }
+                    if(DebugMode) {
+                        Debug.Log("Right Touchpad Click");
                     }
                 }
             }
