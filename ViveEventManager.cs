@@ -20,6 +20,7 @@ public struct ControllerEventObject {
     public float pressure;
     public bool isTriggerClicked;
     public Vector2 touchPoint;
+    public string swipeDirection;
     public SteamVR_Controller.Device controller;
 }
 
@@ -78,6 +79,8 @@ public class ViveEventManager : MonoBehaviour {
     public event ControllerEventHandler OnTouchEnd;
     public event ControllerEventHandler OnTouchTap;
     public event ControllerEventHandler OnTouchSwipe;
+    Vector2 leftTouchStartPoint;
+    Vector2 rightTouchStartPoint;
     public event ControllerEventHandler OnTouchpadPressStart;
     float leftTouchpadPressStartTime;
     float rightTouchpadPressStartTime;
@@ -119,6 +122,7 @@ public class ViveEventManager : MonoBehaviour {
             eventObj.pressure = leftController.GetState().rAxis1.x;
             eventObj.isTriggerClicked = hasLeftTriggerBeenClicked;
             eventObj.touchPoint = Vector2.zero;
+            eventObj.swipeDirection = "none";
             eventObj.controller = leftController;
 
             /* Trigger Events */
@@ -214,6 +218,7 @@ public class ViveEventManager : MonoBehaviour {
                     OnTouchStart(eventObj);
                 }
                 leftTouchStartTime = Time.time;
+                leftTouchStartPoint = eventObj.touchPoint;
                 if(DebugMode) {
                     Debug.Log("Left Touch Start");
                 }
@@ -237,7 +242,31 @@ public class ViveEventManager : MonoBehaviour {
                 if(DebugMode) {
                     Debug.Log("Left Touch End");
                 }
-                if(Time.time - leftTouchStartTime < clickTimeThreshold) {
+                if(Time.time - leftTouchStartTime < swipeTimeThreshold) {
+                    Vector2 deltaPoint = eventObj.touchPoint - leftTouchStartPoint;
+                    if(Mathf.Abs(deltaPoint.x) > Mathf.Abs(deltaPoint.y)) {
+                        if(Mathf.Abs(deltaPoint.x) > swipeDistanceThreshold) {
+                            eventObj.swipeDirection = deltaPoint.x > 0 ? "+X" : "-X";
+                            if(OnTouchSwipe != null) {
+                                OnTouchSwipe(eventObj);
+                            }
+                            if(DebugMode) {
+                                Debug.Log("Left Swipe " + eventObj.swipeDirection);
+                            }
+                        }
+                    } else {
+                        if(Mathf.Abs(deltaPoint.y) > swipeDistanceThreshold) {
+                            eventObj.swipeDirection = deltaPoint.y > 0 ? "+Y" : "-Y";
+                            if(OnTouchSwipe != null) {
+                                OnTouchSwipe(eventObj);
+                            }
+                            if(DebugMode) {
+                                Debug.Log("Left Swipe " + eventObj.swipeDirection);
+                            }
+                        }
+                    }
+                }
+                if(Time.time - leftTouchStartTime < clickTimeThreshold && eventObj.swipeDirection == "none") {
                     if(OnTouchTap != null) {
                         OnTouchTap(eventObj);
                     }
@@ -387,6 +416,7 @@ public class ViveEventManager : MonoBehaviour {
                     OnTouchStart(eventObj);
                 }
                 rightTouchStartTime = Time.time;
+                leftTouchStartPoint = eventObj.touchPoint;
                 if(DebugMode) {
                     Debug.Log("Right Touch Start");
                 }
@@ -409,6 +439,30 @@ public class ViveEventManager : MonoBehaviour {
                 }
                 if(DebugMode) {
                     Debug.Log("Right Touch End");
+                }
+                if(Time.time - rightTouchStartTime < swipeTimeThreshold) {
+                    Vector2 deltaPoint = eventObj.touchPoint - rightTouchStartPoint;
+                    if(Mathf.Abs(deltaPoint.x) > Mathf.Abs(deltaPoint.y)) {
+                        if(Mathf.Abs(deltaPoint.x) > swipeDistanceThreshold) {
+                            eventObj.swipeDirection = deltaPoint.x > 0 ? "+X" : "-X";
+                            if(OnTouchSwipe != null) {
+                                OnTouchSwipe(eventObj);
+                            }
+                            if(DebugMode) {
+                                Debug.Log("Right Swipe " + eventObj.swipeDirection);
+                            }
+                        }
+                    } else {
+                        if(Mathf.Abs(deltaPoint.y) > swipeDistanceThreshold) {
+                            eventObj.swipeDirection = deltaPoint.y > 0 ? "+Y" : "-Y";
+                            if(OnTouchSwipe != null) {
+                                OnTouchSwipe(eventObj);
+                            }
+                            if(DebugMode) {
+                                Debug.Log("Right Swipe " + eventObj.swipeDirection);
+                            }
+                        }
+                    }
                 }
                 if(Time.time - rightTouchStartTime < clickTimeThreshold) {
                     if(OnTouchTap != null) {
