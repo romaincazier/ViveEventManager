@@ -63,7 +63,7 @@ A small utility class to easily add listeners to hmd/controllers events
 
 
 ## To-do
-+ add `OnSwipe` event on Touchpad
++ ~~add `OnSwipe` event on Touchpad~~
 + add `OnPointerEnter`, `OnPointerOver`, `OnPointerLeave` events on the controllers using a raycast
 + add `OnContactEnter`, `OnContactOver`, `OnContactLeave` events on the controllers using a collider (sphere ?)
 + add `OnLookEnter`, `OnLookOver`, `OnLookLeave` events on the HMD
