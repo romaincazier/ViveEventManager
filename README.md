@@ -39,6 +39,7 @@ A small utility class to easily add listeners to hmd/controllers events
 + `OnTouchMove`
 + `OnTouchEnd`
 + `OnTouchTap`, triggered if the delta time between `OnTouchStart` and `OnTouchEnd` is less than 300 milliseconds
++ `OnSwipe`
 + `OnTouchpadPressStart`
 + `OnTouchpadPress`
 + `OnTouchpadPressEnd`
@@ -56,6 +57,7 @@ A small utility class to easily add listeners to hmd/controllers events
 + `.pressure` returns the pressure on the trigger (from 0.0f to 1.0f)
 + `.isTriggerClicked` returns `true` if the trigger has been clicked while it's still pressed
 + `.touchPoint` returns the finger's position on the touchpad, from -1.0f to 1.0f on both x- (left to right) and y-axis (bottom to top). Returns a Vector2.zero by default
++ `.swipeDirection` returns "+X" (left-to-right), "-X" (right-to-left), "+Y" (top-to-bottom), "-Y" (bottom-to-top). Returns "none" by default
 + `.controller` returns the controller object
 
 #### HMD
