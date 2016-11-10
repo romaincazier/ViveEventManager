@@ -66,7 +66,7 @@ A small utility class to easily add listeners to hmd/controllers events
 
 ## To-do
 + add `OnPointerEnter`, `OnPointerOver`, `OnPointerLeave` events on the controllers using a raycast
-+ add `OnContactEnter`, `OnContactOver`, `OnContactLeave` events on the controllers using a collider (sphere ?)
 + add `OnLookEnter`, `OnLookOver`, `OnLookLeave` events on the HMD
-+ display raycast/collider on "Debug Mode"
++ display raycast on "Debug Mode"
 + add a Unity scene with an example
++ switch to `UnityEvent` ? To allow to add custom events in a centralized object ?
