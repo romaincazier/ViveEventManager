@@ -14,7 +14,7 @@ A small utility class to easily add listeners to hmd/controllers events
 
    * `ViveEventManager.Instance.[Event] += [Listener];`
    
-+ You can use a "debug" mode that will print you the events as they occur:
++ You can use a "debug" mode that will print you the events as they occur and display the raycast from both controllers:
 
    * create an empty GameObject, add the script and select the "Debug Mode" or
    
@@ -67,6 +67,5 @@ A small utility class to easily add listeners to hmd/controllers events
 ## To-do
 + add `OnPointerEnter`, `OnPointerOver`, `OnPointerLeave` events on the controllers using a raycast
 + add `OnLookEnter`, `OnLookOver`, `OnLookLeave` events on the HMD
-+ display raycast on "Debug Mode"
 + add a Unity scene with an example
 + switch to `UnityEvent` ? To allow to add custom events in a centralized object ?
