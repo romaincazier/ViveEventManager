@@ -10,6 +10,7 @@
  *    http://github.com/romaincazier/ViveEventManager
  *
  */
+
 using UnityEngine;
 using System.Collections;
 
@@ -48,10 +49,12 @@ public class ViveEventManager : MonoBehaviour {
 
     private SteamVR_Camera hmd;
     private SteamVR_Controller.Device leftController;
-    private SteamVR_TrackedObject leftControllerTracker;
+    private GameObject leftControllerObject;
+    private LineRenderer leftRay;
     private SteamVR_Controller.Device rightController;
-    private SteamVR_TrackedObject rightControllerTracker;
-    
+    private GameObject rightControllerObject;
+    private LineRenderer rightRay;
+
     public event ControllerEventHandler OnTriggerPressStart;
     bool hasLeftTriggerPressStarted;
     bool hasLeftTriggerBeenClicked;
@@ -91,6 +94,24 @@ public class ViveEventManager : MonoBehaviour {
     void Awake() {
         hmd = FindObjectOfType(typeof(SteamVR_Camera)) as SteamVR_Camera;
 
+        var controllerManager = FindObjectOfType(typeof(SteamVR_ControllerManager)) as SteamVR_ControllerManager;
+
+        leftControllerObject  = controllerManager.left;
+
+        leftRay = leftControllerObject.AddComponent<LineRenderer>();
+        leftRay.material = new Material(Shader.Find("Particles/Additive"));
+        leftRay.useWorldSpace = false;
+        leftRay.SetWidth(0.001f, 0.001f);
+        leftRay.SetPosition(1, Vector3.forward * 100.0f);
+
+        rightControllerObject = controllerManager.right;
+
+        rightRay = rightControllerObject.AddComponent<LineRenderer>();
+        rightRay.material = new Material(Shader.Find("Particles/Additive"));
+        rightRay.useWorldSpace = false;
+        rightRay.SetWidth(0.001f, 0.001f);
+        rightRay.SetPosition(1, Vector3.forward * 100.0f);
+
         hasLeftTriggerPressStarted  = false;
         hasLeftTriggerBeenClicked   = false;
         hasRightTriggerPressStarted = false;
@@ -102,23 +123,25 @@ public class ViveEventManager : MonoBehaviour {
     }
 
     void FixedUpdate() {
-        SteamVR_TrackedObject[] objects = FindObjectsOfType<SteamVR_TrackedObject>();
+        var leftIndex = leftControllerObject.GetComponent<SteamVR_TrackedObject>().index;
+        if(leftIndex != SteamVR_TrackedObject.EIndex.None) {
+            leftController = SteamVR_Controller.Input((int)leftIndex);
+        } else {
+            leftController = null;
+        }
 
-        foreach(SteamVR_TrackedObject obj in objects) {
-            if(obj.name.Contains("left")) {
-                leftController = SteamVR_Controller.Input((int)obj.index);
-                leftControllerTracker = obj;
-            } else if(obj.name.Contains("right")) {
-                rightController = SteamVR_Controller.Input((int)obj.index);
-                rightControllerTracker = obj;
-            }
+        var rightIndex = rightControllerObject.GetComponent<SteamVR_TrackedObject>().index;
+        if(rightIndex != SteamVR_TrackedObject.EIndex.None) {
+            rightController = SteamVR_Controller.Input((int)rightIndex);
+        } else {
+            rightController = null;
         }
 
         if(leftController != null) {
             ControllerEventObject eventObj = new ControllerEventObject();
             eventObj.side = "left";
-            eventObj.position = leftControllerTracker.transform.position;
-            eventObj.rotation = leftControllerTracker.transform.rotation;
+            eventObj.position = leftControllerObject.transform.position;
+            eventObj.rotation = leftControllerObject.transform.rotation;
             eventObj.pressure = leftController.GetState().rAxis1.x;
             eventObj.isTriggerClicked = hasLeftTriggerBeenClicked;
             eventObj.touchPoint = Vector2.zero;
@@ -311,13 +334,17 @@ public class ViveEventManager : MonoBehaviour {
                     }
                 }
             }
+
+            if(DebugMode) {
+                //(leftControllerTracker.transform.position, leftControllerTracker.transform.forward, Color.white);
+            }
         }
 
         if(rightController != null) {
             ControllerEventObject eventObj = new ControllerEventObject();
             eventObj.side = "right";
-            eventObj.position = rightControllerTracker.transform.position;
-            eventObj.rotation = rightControllerTracker.transform.rotation;
+            eventObj.position = rightControllerObject.transform.position;
+            eventObj.rotation = rightControllerObject.transform.rotation;
             eventObj.pressure = rightController.GetState().rAxis1.x;
             eventObj.isTriggerClicked = hasRightTriggerBeenClicked;
             eventObj.touchPoint = Vector2.zero;
@@ -416,7 +443,7 @@ public class ViveEventManager : MonoBehaviour {
                     OnTouchStart(eventObj);
                 }
                 rightTouchStartTime = Time.time;
-                leftTouchStartPoint = eventObj.touchPoint;
+                rightTouchStartPoint = eventObj.touchPoint;
                 if(DebugMode) {
                     Debug.Log("Right Touch Start");
                 }
@@ -447,6 +474,7 @@ public class ViveEventManager : MonoBehaviour {
                             eventObj.swipeDirection = deltaPoint.x > 0 ? "+X" : "-X";
                             if(OnTouchSwipe != null) {
                                 OnTouchSwipe(eventObj);
+                                Debug.Log(OnTouchSwipe);
                             }
                             if(DebugMode) {
                                 Debug.Log("Right Swipe " + eventObj.swipeDirection);
